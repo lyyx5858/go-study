@@ -1,14 +1,21 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 )
 
-func handler1(writer http.ResponseWriter, request *http.Request) {
-	fmt.Fprintf(writer, "Hello World, %s!", request.URL.Path[1:])
-}
 func main() {
-	http.HandleFunc("/", handler1)
-	http.ListenAndServe(":8080", nil)
+
+	mux:=http.NewServeMux()
+	mux.Handle("/",&myHandler{})
+	mux.HandleFunc("/bye",sayBye)
+
+	http.ListenAndServe(":8080", mux)
+}
+type myHandler struct {} //此处myHandler是空结构 ，只是为了实现ServeHTTP方法，
+func(*myHandler)ServeHTTP(w http.ResponseWriter, r *http.Request){
+	w.Write([]byte("Hello World"))
+}
+func sayBye(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Bye World"))
 }

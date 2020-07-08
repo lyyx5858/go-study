@@ -12,7 +12,7 @@ func main() {
 	res1 := add
 	res1 = sub
 	res1 = t1
-	res1 = t2  //上面的t1可以赋值给res1的原因是，t1和res1有着相同的输入和输出，而t2就不能赋值给res1
+	//res1 = t2  //上面的t1可以赋值给res1的原因是，t1和res1有着相同的输入和输出，而t2就不能赋值给res1
 
 	fmt.Println(res1)
 
@@ -51,6 +51,7 @@ func sub(a, b int) int {
 }
 
 func add(a, b int) int {
+	sub(a,b)
 	return a + b
 }
 

@@ -11,11 +11,13 @@ type interface1 interface { //interface1实现了方法method1
 	method1()
 }
 
+//hi, baby, if you have this method, you are my type.
+
 func main() {
 	var l1 Liu //l1是数据类型Liu
 	var w1 Wu //w1是数据类型Wu
 	var i3 interface1 //l3是接口
-	var f1 func(i interface1)
+	var f1 func(i interface1) //f1是个函数类型
 
 	fmt.Printf("-------%T \n", l1.method1)
 	fmt.Printf("-------%v \n", w1.method1)
