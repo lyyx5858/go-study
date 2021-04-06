@@ -45,6 +45,10 @@ func main() {
 	//var d  string
 	//d = "hello"
 	c = fun1 //将fun1的值(函数体的地址)赋值给c
+	type c1 func(int,int)
+	var c2 c1
+	fmt.Printf("c2 type %T\n",c2)
+
 	fmt.Println(c)
 
 	fun1(10,20)
@@ -57,6 +61,8 @@ func main() {
 
 	fmt.Println(res1(10,20))//也可以被调用
 	//res2() //cannot call non-function res2 (type int)
+
+
 }
 func fun2(a,b int)int{
 	return a + b
