@@ -13,7 +13,7 @@ func main() {
 	fmt.Println(a)
 	fmt.Printf("没调用的func1的值: %T, %v, \n", func1, func1)
 	c=func1 //注意此处，赋值给C时，不能代()，带()后，就是将func1的返回值赋给C(系统会报错)，而不带()表示将func1赋给c
-	fmt.Printf("调用后func1的类型 %T \n", c)
+	fmt.Printf("调用后func1的类型 %T ,%v, \n", c, c)
 
 }
 
