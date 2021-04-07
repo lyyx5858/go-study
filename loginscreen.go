@@ -29,8 +29,7 @@ func main() {
 	// 写入：32位整形值
 	key.SetDWordValue(`LockScreenImageStatus`, uint32(1))
 
-
-	s, _, err := key.GetStringsValue ("LockScreenImagePath")
+	s, _, err := key.GetStringsValue("LockScreenImagePath")
 
 	if err != nil {
 		log.Fatal(err)

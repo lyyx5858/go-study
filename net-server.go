@@ -33,8 +33,6 @@ func main() {
 	}
 
 	fmt.Println("deal with the buf")
-	fmt.Println("the buf is",string(buf[:n]))
-
-
+	fmt.Println("the buf is", string(buf[:n]))
 
 }

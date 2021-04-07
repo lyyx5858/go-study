@@ -31,7 +31,7 @@ func main() {
 		}
 
 		i++
-		fmt.Println("====================i=",i,"==============================")
+		fmt.Println("====================i=", i, "==============================")
 
 		n, err := client.Read(clientData) // 此处读client发过来的http请求至clientData, n是表示读了多少个字节
 		requestStrings := string(clientData[:n])
@@ -52,13 +52,13 @@ func main() {
 		}
 
 		fmt.Println()
-		fmt.Println("Method:----->",method)
-		fmt.Println("uri:-------->",uri)
-		fmt.Println("Host ------->",host)
+		fmt.Println("Method:----->", method)
+		fmt.Println("uri:-------->", uri)
+		fmt.Println("Host ------->", host)
 
 		//host利用上面for已经分离出来，URI是最终访问地址, 将address从地址里分出来 ，加上端口号
 
-		if strings.Index(uri, "http:") >0 {
+		if strings.Index(uri, "http:") > 0 {
 			parseUrl, err := url.Parse(uri)
 			fmt.Println("parseurl is:", parseUrl)
 			if err != nil {
@@ -75,7 +75,6 @@ func main() {
 
 		fmt.Println("Address is ------->", address)
 
-
 		//获得了请求host和port，开始拨号进行tcp连接
 		server, err := net.Dial("tcp", address)
 		if err != nil {
@@ -91,7 +90,6 @@ func main() {
 			server.Write(clientData[:n]) //将client发来的请求，指向服务器
 			fmt.Println("6")
 		}
-
 
 		go io.Copy(client, server)
 		go io.Copy(server, client)

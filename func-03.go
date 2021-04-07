@@ -8,7 +8,6 @@ func main() {
 	fmt.Printf("%T\n", t1)
 	fmt.Printf("%T\n", oper)
 
-
 	res1 := add
 	res1 = sub
 	res1 = t1
@@ -51,7 +50,7 @@ func sub(a, b int) int {
 }
 
 func add(a, b int) int {
-	sub(a,b)
+	sub(a, b)
 	return a + b
 }
 

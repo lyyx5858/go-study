@@ -1,9 +1,6 @@
 package main
 
-
-
 import (
-
 	"fmt"
 
 	"io/ioutil"
@@ -11,14 +8,11 @@ import (
 	"log"
 
 	"net/http"
-
 )
-
-
 
 func main() {
 
-	resp,err := http.Get("http://www.baidu.com")
+	resp, err := http.Get("http://www.baidu.com")
 
 	if err != nil {
 
@@ -26,9 +20,7 @@ func main() {
 
 	}
 
-
-
-	bData,err := ioutil.ReadAll(resp.Body)
+	bData, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
 

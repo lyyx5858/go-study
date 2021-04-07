@@ -25,16 +25,16 @@ func main() {
 	*/
 
 	//1.创建父类的对象
-	p1 := Person{name:"张三",age:30}
+	p1 := Person{name: "张三", age: 30}
 	fmt.Println(p1)
 	fmt.Printf("%v\n", p1)
-	fmt.Println(&p1.name,&p1.age)
+	fmt.Println(&p1.name, &p1.age)
 
 	//2.创建子类的对象
-	s1 := Student{Person{"李四",17},"千锋教育"}
+	s1 := Student{Person{"李四", 17}, "千锋教育"}
 	fmt.Println(s1)
 
-	s2 :=Student{Person:Person{name:"rose",age:19},school:"北京大学"}
+	s2 := Student{Person: Person{name: "rose", age: 19}, school: "北京大学"}
 	fmt.Println(s2)
 
 	var s3 Student
@@ -47,9 +47,9 @@ func main() {
 	s3.age = 16
 	fmt.Println(s3)
 
-	fmt.Println(s1.name,s1.age,s1.school)
-	fmt.Println(s2.name,s2.age,s2.school)
-	fmt.Println(s3.name,s3.age,s3.school)
+	fmt.Println(s1.name, s1.age, s1.school)
+	fmt.Println(s2.name, s2.age, s2.school)
+	fmt.Println(s3.name, s3.age, s3.school)
 	/*
 	   s3.Person.name---->s3.name
 	   Student结构体将Person结构体作为一个匿名字段了
@@ -57,16 +57,16 @@ func main() {
 	   Student对象直接访问Person中的字段
 	*/
 
-
 }
+
 //1.定义父类
 type Person struct {
 	name string
-	age int
+	age  int
 }
 
 //2.定义子类
 type Student struct {
-	Person //模拟继承结构
+	Person        //模拟继承结构
 	school string //子类的新增属性
 }

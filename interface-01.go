@@ -10,21 +10,17 @@ func main() {
 	var zhangsan = Student{"张三", 20}
 	var lilaoshi = Teacher{"李老师"}
 
-
-
 	fmt.Println("用方法来实现：")
-	fmt.Println(zhangsan.see_name) //注意此处不带括号，是打印的是see_name这个方法的内存地址，
-	fmt.Println(lilaoshi.see_name) //这个地址与上面一行地址不同，表明不同结构的方法虽然名字一样，其实是不同的实体
+	fmt.Println(zhangsan.see_name)   //注意此处不带括号，是打印的是see_name这个方法的内存地址，
+	fmt.Println(lilaoshi.see_name)   //这个地址与上面一行地址不同，表明不同结构的方法虽然名字一样，其实是不同的实体
 	fmt.Println(lilaoshi.see_name()) //注意方法带括号和不带括号的区别
 
 	//fmt.Printf("%T   %v\n",other,other)
-
 
 	fmt.Println("===============\n下面用接口实现:")
 	fmt.Printf("n1, n2的类型：%T  %T\n", n1, n2)
 	fmt.Printf("n1, n2的值：%v  %v\n", n1, n2)
 	fmt.Printf("n1, n2的值：%v  %v\n", &n1, &n2)
-
 
 	//fmt.Printf("other的值：%v  类型%T\n", other, other)
 
@@ -40,7 +36,7 @@ func main() {
 	fmt.Println(n2.see_name())
 
 	fmt.Println(fayan(lilaoshi)) //fayan是个以接口为参数的函数
-	fmt.Println(fayan(n2)) //这句与上行的区别是？
+	fmt.Println(fayan(n2))       //这句与上行的区别是？
 
 	fmt.Println(fayan(other.n))
 
@@ -54,9 +50,7 @@ type sayname interface { // name 是个接口
 
 type saymorename interface {
 	sayname
-
 }
-
 
 // Student 是个结构
 type Student struct {

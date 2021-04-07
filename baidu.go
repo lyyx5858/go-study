@@ -1,13 +1,13 @@
 package main
 
 import (
-"context"
-"fmt"
-"github.com/PuerkitoBio/goquery"
-"github.com/chromedp/chromedp"
-"log"
-"strings"
-"time"
+	"context"
+	"fmt"
+	"github.com/PuerkitoBio/goquery"
+	"github.com/chromedp/chromedp"
+	"log"
+	"strings"
+	"time"
 )
 
 func main() {
@@ -23,11 +23,11 @@ func main() {
 
 	c0, cancel := chromedp.NewExecAllocator(context.Background(), options...)
 	defer cancel()
-	c1, cancel := chromedp.NewContext( c0, chromedp.WithLogf(log.Printf))
+	c1, cancel := chromedp.NewContext(c0, chromedp.WithLogf(log.Printf))
 	defer cancel()
 	// chromedp.Run(c1, make([]chromedp.Action, 0, 1)...)
 	// 给每个页面的爬取设置超时时间 10s后关闭
-	c2, cancel := context.WithTimeout(c1, 20 * time.Second)
+	c2, cancel := context.WithTimeout(c1, 20*time.Second)
 	defer cancel()
 
 	var htmlContent string
@@ -55,7 +55,6 @@ func main() {
 	doc.Find("strong[class=J-p-209954]").Each(func(i int, s *goquery.Selection) {
 		fmt.Println(s.Text())
 	})
-
 
 	//doc.Find("span").Each(func(i int, s *goquery.Selection) {
 	//	// fmt.Println(enc.ConvertString(s.Text()))

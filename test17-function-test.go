@@ -14,8 +14,8 @@ func main() {
 	fmt.Printf("没调用的c的值: %T, %v, \n", c, c)
 	c = func1
 	c(a) //此处是调用c,其实就是调用func1
-	fmt.Printf("调用后c的类型 %T %v \n", c,c)
-	fmt.Printf("调用后func1的类型 %T %v \n", func1,func1)
+	fmt.Printf("调用后c的类型 %T %v \n", c, c)
+	fmt.Printf("调用后func1的类型 %T %v \n", func1, func1)
 
 }
 func func1(a int) {

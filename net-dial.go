@@ -21,7 +21,7 @@ func main() {
 	/**从res读取内容**/
 	defer res.Body.Close() // 读取结束后关闭流，类似文件操作完后，需要关闭一样
 
-	fmt.Println("响应状态:", res.StatusCode,"\n") // 响应状态
+	fmt.Println("响应状态:", res.StatusCode, "\n") // 响应状态
 	fmt.Println("响应头", res.Header, "\n")       // 响应头
 
 	/*读取内容*/
