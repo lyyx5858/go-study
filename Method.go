@@ -10,7 +10,7 @@ func main() {
 
 	var x liu
 	x = 2
-	fmt.Printf("%T %v \n", l1, l1)
+	fmt.Printf("%T %v \n", x, x)
 	x.method1()
 }
 

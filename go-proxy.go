@@ -1,8 +1,8 @@
 package main
 
 import (
-	// "github.com/elazarl/goproxy"
-	"elazarl/goproxy"
+	"github.com/elazarl/goproxy"
+	//"elazarl/goproxy"
 	"fmt"
 	"log"
 	"net/http"
