@@ -15,7 +15,7 @@ func main() {
 	fmt.Println(lilaoshi.see_name)   //这个地址与上面一行地址不同，表明不同结构的方法虽然名字一样，其实是不同的实体
 	fmt.Println(lilaoshi.see_name()) //注意方法带括号和不带括号的区别
 
-// 下面用接口实现
+	// 下面用接口实现
 
 	fmt.Println("===============\n下面用接口实现:")
 	fmt.Printf("n1, n2的类型：%T  %T\n", n1, n2)
@@ -41,13 +41,6 @@ func main() {
 	fmt.Println(fayan(other.n))
 
 }
-
-
-
-
-
-
-
 
 //所有实现see_name方法的类型都叫做实现sayname接口，注意：实现接口的不一定全是结构体
 

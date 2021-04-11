@@ -58,7 +58,7 @@ func main() {
 	res2 := fun2(1, 2) //将fun2函数进行调用，将函数的执行结果赋值给res2，相当于：a+b
 	fmt.Println(res1)
 	fmt.Println(res2)
-
+	fmt.Println(fun3(5))
 	fmt.Println(res1(10, 20)) //也可以被调用
 	//res2() //cannot call non-function res2 (type int)
 
@@ -69,3 +69,4 @@ func fun2(a, b int) int {
 func fun1(a, b int) {
 	fmt.Printf("a:%d,b:%d\n", a, b)
 }
+
