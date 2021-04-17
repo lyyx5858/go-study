@@ -69,4 +69,3 @@ func fun2(a, b int) int {
 func fun1(a, b int) {
 	fmt.Printf("a:%d,b:%d\n", a, b)
 }
-

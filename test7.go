@@ -4,10 +4,12 @@ import (
 	"fmt"
 )
 
+//匿名函数
+
 func main() {
 
-	func(data int) {
-		fmt.Println("hello", data)
+	func(date int) {
+		fmt.Println("hello", date)
 	}(100)
 
 }

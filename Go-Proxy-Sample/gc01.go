@@ -16,7 +16,7 @@ func main() {
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.Verbose = true
 
-	proxy.Tr.Proxy= func(request *http.Request) (*url.URL, error) {
+	proxy.Tr.Proxy = func(request *http.Request) (*url.URL, error) {
 		return url.Parse("http://127.0.0.1:8080")
 	}
 
@@ -26,7 +26,6 @@ func main() {
 
 	// set basic auth
 	proxy.OnRequest().Do(SetAuthForBasicRequest(username, password))
-
 
 	fmt.Println("Start Client at port:7070...")
 	log.Fatal(http.ListenAndServe(":7070", proxy))
@@ -44,8 +43,6 @@ func SetAuthForBasicConnectRequest(username, password string) func(req *http.Req
 		SetBasicAuth(username, password, req)
 	}
 }
-
-
 
 //COMMON
 const (

@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+//回调函数
+
 func main() {
 	fmt.Printf("%T\n", add)
 	fmt.Printf("%T\n", sub)

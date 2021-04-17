@@ -2,6 +2,8 @@ package main
 
 import "fmt"
 
+//闭包
+
 func main() {
 
 	res1 := increment //可以理解为将increment这个函数的地址给res1

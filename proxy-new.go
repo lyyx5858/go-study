@@ -8,12 +8,12 @@ import (
 	"strings"
 )
 
-type Pxy struct {}
+type Pxy struct{}
 
 func (p *Pxy) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	fmt.Printf("Received request %s %s %s\n", req.Method, req.Host, req.RemoteAddr)
 
-	transport :=  http.DefaultTransport
+	transport := http.DefaultTransport
 
 	// step 1
 	outReq := new(http.Request)

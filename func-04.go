@@ -2,12 +2,19 @@ package main
 
 import "fmt"
 
+//函数变量
+
 func main() {
 	var a, x, y int
 	var c func(int) (int, int) //第一个int是输入，后面两个int是输出
 	//此处的func是关键字，c的类型是func(int) int,由于hanshu这个函数的输入和输出参数与c完全相同，因此可以将hanshu赋值给
 	//此处的c就是所谓的“函数变量”
+	type t1 func(int) (int, int)
 
+	x1 := t1(c) //因为t1的签名与c一样，所以可以强制转换
+
+
+	fmt.Println(x1)
 	a = 1
 	x = 2
 	y = x //变量的赋值：是将x这块内存区域的值2拷贝给y这个内存区域，从下面这句话可以看出，x and y的地址是不一样的。但是函数赋值不同！

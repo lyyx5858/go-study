@@ -17,13 +17,19 @@ func main() {
 
 	proxy.Verbose = true
 
-	ProxyBasicAuth(proxy, func(u, p string) bool {
-		return u == username && p == password
-	})
+	f1 := func(u, p string) bool { return u == username && p == password }
+	ProxyBasicAuth(proxy, f1)
+
+	//下面是原始代码，在上面两行，利用临时变量f1来代替下面这几行，充分理解函数就是一个变量的概念
+	//ProxyBasicAuth(proxy, func(u, p string) bool {
+	//	return u == username && p == password
+	//})
 
 	fmt.Println("start Server at port:8080")
 	log.Fatal(http.ListenAndServe(":8080", proxy))
 }
+
+//-------------------------------------------
 
 var unauthorizedMsg = []byte("404 not found")
 
@@ -59,15 +65,29 @@ func auth(req *http.Request, f func(user, passwd string) bool) bool {
 // Basic returns a basic HTTP authentication handler for requests
 //
 // You probably want to use auth.ProxyBasic(proxy) to enable authentication for all proxy activities
+
+//func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {
+//	//FuncReqHandler是一种类型，下面这句话利用强制类型转换，将一个匿名函数转换成了FuncReqHandler类型
+//	return goproxy.FuncReqHandler(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+//		if !auth(req, f) {
+//			log.Fatal("basic auth verify for normal request failed")
+//			return nil, BasicUnauthorized(req)
+//		}
+//		req.Header.Del(ProxyAuthHeader)
+//		return req, nil
+//	})
+//}
+
 func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {
-	return goproxy.FuncReqHandler(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+	temp := func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		if !auth(req, f) {
 			log.Fatal("basic auth verify for normal request failed")
 			return nil, BasicUnauthorized(req)
 		}
 		req.Header.Del(ProxyAuthHeader)
 		return req, nil
-	})
+	}
+	return goproxy.FuncReqHandler(temp)   //此处的用法是强制类型转换，将temp转换成了FuncReqHandler
 }
 
 // BasicConnect returns a basic HTTP authentication handler for CONNECT requests
@@ -87,10 +107,14 @@ func BasicConnect(f func(user, passwd string) bool) goproxy.HttpsHandler {
 
 // ProxyBasic will force HTTP authentication before any request to the proxy is processed
 func ProxyBasicAuth(proxy *goproxy.ProxyHttpServer, f func(user, passwd string) bool) {
-	proxy.OnRequest().Do(Basic(f))
+	//原始语句如下，执行顺序是，从左向右
+	//proxy.OnRequest().Do(Basic(f))
+	temp := proxy.OnRequest()
+	temp.Do(Basic(f))
+	//此处，Basic(f)的返回值是一个Handler.
+
 	proxy.OnRequest().HandleConnect(BasicConnect(f))
 }
-
 
 //COMMON
 const (

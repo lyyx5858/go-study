@@ -39,7 +39,7 @@ func main() {
 	f3real(i3)
 
 	x := f3(tt)
-	y := f
+	y := f1
 
 	fmt.Printf("----f1---%v %v \n", f1, f4)
 	fmt.Printf("----i3---%v \n", &i3)
