@@ -87,7 +87,10 @@ func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {
 		req.Header.Del(ProxyAuthHeader)
 		return req, nil
 	}
-	return goproxy.FuncReqHandler(temp)   //此处的用法是强制类型转换，将temp转换成了FuncReqHandler
+
+	// temp是个函数类型的变量，签名是：func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response)
+	//强制类型转换的前提是：被转换的变量与转换类型签名一致。
+	return goproxy.FuncReqHandler(temp) //此处的用法是强制类型转换，将temp转换成了FuncReqHandler
 }
 
 // BasicConnect returns a basic HTTP authentication handler for CONNECT requests

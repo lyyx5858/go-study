@@ -13,7 +13,6 @@ func main() {
 
 	x1 := t1(c) //因为t1的签名与c一样，所以可以强制转换
 
-
 	fmt.Println(x1)
 	a = 1
 	x = 2
