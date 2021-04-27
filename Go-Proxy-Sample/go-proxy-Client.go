@@ -13,7 +13,7 @@ func main() {
 	fmt.Println("Start Client at port:7070...")
 	proxy.Verbose = true
 
-	proxy.Tr.Proxy= func(request *http.Request) (*url.URL, error) {
+	proxy.Tr.Proxy = func(request *http.Request) (*url.URL, error) {
 		return url.Parse("http://127.0.0.1:8080")
 	}
 

@@ -16,7 +16,7 @@ func main() {
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.Verbose = true
 
-	proxy.Tr.Proxy= func(request *http.Request) (*url.URL, error) {
+	proxy.Tr.Proxy = func(request *http.Request) (*url.URL, error) {
 		return url.Parse("http://127.0.0.1:8080")
 	}
 
@@ -26,6 +26,9 @@ func main() {
 
 	// set basic auth
 	proxy.OnRequest().Do(SetAuthForBasicRequest(username, password))
+	//上面这句话是在一定条件下，做。。。。
+	//OnRequest()是条件，它本质是一个proxy的方法，其参数是可变，也可省略，省略代表任何条件下都要执行Do方法
+	//Do的输入参数是一个handler，然后Do将这个新的handler附加到proxy的handler数组上去
 
 
 	fmt.Println("Start Client at port:7070...")
@@ -44,8 +47,6 @@ func SetAuthForBasicConnectRequest(username, password string) func(req *http.Req
 		SetBasicAuth(username, password, req)
 	}
 }
-
-
 
 //COMMON
 const (
