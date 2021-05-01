@@ -41,16 +41,61 @@ func main() {
 
 var unauthorizedMsg = []byte("404 not found")
 
-func BasicUnauthorized(req *http.Request) *http.Response {
-	return &http.Response{
-		StatusCode:    404, // for purpose of avoiding proxy detection
-		ProtoMajor:    1,
-		ProtoMinor:    1,
-		Request:       req,
-		Header:        http.Header{},
-		Body:          ioutil.NopCloser(bytes.NewBuffer(unauthorizedMsg)),
-		ContentLength: int64(len(unauthorizedMsg)),
+// ProxyBasic will force HTTP authentication before any request to the proxy is processed
+func ProxyBasicAuth(proxy *goproxy.ProxyHttpServer, f func(user, passwd string) bool) {
+	//原始语句如下，执行顺序是，从左向右
+	//proxy.OnRequest().Do(Basic(f))
+	temp := proxy.OnRequest()
+	temp.Do(Basic(f))   //此处，Basic(f)的返回值是一个Handler.
+	//注意：Basic(f) 与 BasicConnect(f)的区别
+	proxy.OnRequest().HandleConnect(BasicConnect(f))
+}
+
+
+// Basic returns a basic HTTP authentication handler for requests
+// You probably want to use auth.ProxyBasic(proxy) to enable authentication for all proxy activities
+
+//func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {
+//	//FuncReqHandler是一种类型，下面这句话利用强制类型转换，将一个匿名函数转换成了FuncReqHandler类型
+//	return goproxy.FuncReqHandler(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+//		if !auth(req, f) {
+//			log.Fatal("basic auth verify for normal request failed")
+//			return nil, BasicUnauthorized(req)
+//		}
+//		req.Header.Del(ProxyAuthHeader)
+//		return req, nil
+//	})
+//}
+//下面这个函数是上面的改写，只是为了让结构清楚。
+func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {  //用于HTTP
+	temp := func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+		if !auth(req, f) {
+			log.Fatal("basic auth verify for normal request failed")
+			return nil, BasicUnauthorized(req)
+		}
+		req.Header.Del(ProxyAuthHeader)
+		return req, nil
 	}
+	return goproxy.FuncReqHandler(temp) //此处的用法是强制类型转换，将temp转换成了FuncReqHandler
+	// temp是个函数类型的变量，签名是：func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response)
+	//强制类型转换的前提是：被转换的变量与转换类型签名一致。
+}
+
+
+// BasicConnect returns a basic HTTP authentication handler for CONNECT requests
+//
+// You probably want to use auth.ProxyBasic(proxy) to enable authentication for all proxy activities
+func BasicConnect(f func(user, passwd string) bool) goproxy.HttpsHandler { //用于HTTPS
+	return goproxy.FuncHttpsHandler(func(host string, ctx *goproxy.ProxyCtx) (*goproxy.ConnectAction, string) {
+		if !auth(ctx.Req, f) {
+			log.Fatal("basic auth verify for connect request failed")
+			ctx.Resp = BasicUnauthorized(ctx.Req)
+			return goproxy.RejectConnect, host
+		}
+		ctx.Req.Header.Del(ProxyAuthHeader)
+
+		return goproxy.OkConnect, host
+	})
 }
 
 func auth(req *http.Request, f func(user, passwd string) bool) bool {
@@ -67,67 +112,45 @@ func auth(req *http.Request, f func(user, passwd string) bool) bool {
 	if len(userpass) != 2 {
 		return false
 	}
+
 	return f(userpass[0], userpass[1])
 }
 
-//==============================================================================================================
-// Basic returns a basic HTTP authentication handler for requests
-//
-// You probably want to use auth.ProxyBasic(proxy) to enable authentication for all proxy activities
-
-//func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {
-//	//FuncReqHandler是一种类型，下面这句话利用强制类型转换，将一个匿名函数转换成了FuncReqHandler类型
-//	return goproxy.FuncReqHandler(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-//		if !auth(req, f) {
-//			log.Fatal("basic auth verify for normal request failed")
-//			return nil, BasicUnauthorized(req)
-//		}
-//		req.Header.Del(ProxyAuthHeader)
-//		return req, nil
-//	})
-//}
-
-//下面这个函数是上面的改写，只是为了让结构清楚。
-func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {
-	temp := func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-		if !auth(req, f) {
-			log.Fatal("basic auth verify for normal request failed")
-			return nil, BasicUnauthorized(req)
-		}
-		req.Header.Del(ProxyAuthHeader)
-		return req, nil
+func BasicUnauthorized(req *http.Request) *http.Response {
+	return &http.Response{
+		StatusCode:    404, // for purpose of avoiding proxy detection
+		ProtoMajor:    1,
+		ProtoMinor:    1,
+		Request:       req,
+		Header:        http.Header{},
+		Body:          ioutil.NopCloser(bytes.NewBuffer(unauthorizedMsg)),
+		ContentLength: int64(len(unauthorizedMsg)),
 	}
-	return goproxy.FuncReqHandler(temp) //此处的用法是强制类型转换，将temp转换成了FuncReqHandler
-	// temp是个函数类型的变量，签名是：func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response)
-	//强制类型转换的前提是：被转换的变量与转换类型签名一致。
-}
-//==============================================================================================================
-
-// BasicConnect returns a basic HTTP authentication handler for CONNECT requests
-//
-// You probably want to use auth.ProxyBasic(proxy) to enable authentication for all proxy activities
-func BasicConnect(f func(user, passwd string) bool) goproxy.HttpsHandler {
-	return goproxy.FuncHttpsHandler(func(host string, ctx *goproxy.ProxyCtx) (*goproxy.ConnectAction, string) {
-		if !auth(ctx.Req, f) {
-			log.Fatal("basic auth verify for connect request failed")
-			ctx.Resp = BasicUnauthorized(ctx.Req)
-			return goproxy.RejectConnect, host
-		}
-		ctx.Req.Header.Del(ProxyAuthHeader)
-		return goproxy.OkConnect, host
-	})
 }
 
-// ProxyBasic will force HTTP authentication before any request to the proxy is processed
-func ProxyBasicAuth(proxy *goproxy.ProxyHttpServer, f func(user, passwd string) bool) {
-	//原始语句如下，执行顺序是，从左向右
-	//proxy.OnRequest().Do(Basic(f))
-	temp := proxy.OnRequest()
-	temp.Do(Basic(f))
-	//此处，Basic(f)的返回值是一个Handler.
 
-	proxy.OnRequest().HandleConnect(BasicConnect(f))
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //COMMON
 const (
