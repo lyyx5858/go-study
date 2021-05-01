@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/base64"
 	"fmt"
-	"github.com/elazarl/goproxy"
+	goproxy "github.com/elazarl/goproxy"
 	"log"
 	"net/http"
 	"net/url"

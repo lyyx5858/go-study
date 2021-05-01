@@ -18,7 +18,15 @@ func main() {
 	proxy.Verbose = true
 
 	f1 := func(u, p string) bool { return u == username && p == password }
-	ProxyBasicAuth(proxy, f1)
+
+	ProxyBasicAuth(proxy, f1)  //这个函数的目的是将认证过程注册成为Proxy结构体的ReqHandler数组上去.
+								//所谓Handler，其实就是一个接口。
+								//所谓接口，就是定义了一个或者多个方法。
+								//所谓方法，就是一个包含宿主（接收者）的函数
+								//所谓函数就是一小块内存，包含可执行代码
+
+
+
 
 	//下面是原始代码，在上面两行，利用临时变量f1来代替下面这几行，充分理解函数就是一个变量的概念
 	//ProxyBasicAuth(proxy, func(u, p string) bool {
@@ -94,9 +102,6 @@ func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {
 	//强制类型转换的前提是：被转换的变量与转换类型签名一致。
 }
 //==============================================================================================================
-
-
-
 
 // BasicConnect returns a basic HTTP authentication handler for CONNECT requests
 //
