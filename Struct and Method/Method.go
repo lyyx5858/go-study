@@ -11,6 +11,8 @@ type wang struct {
 	test liu //注意与上行的区别
 }
 
+type zhang func(int)(int)
+
 func main() {
 
 	var x liu
@@ -27,6 +29,10 @@ func main() {
 	w1.method2(5) //注意此行与上行用区别
 	w1.method2(6).method1(7) //注意此行是先执行method2，然后返回的liu型值，然后再执行liu的方法method1
 
+	z1:=func(a int)int{return a+a}
+	z2:=zhang(z1)
+	z2.method(7)
+
 
 }
 
@@ -40,5 +46,10 @@ func (w wang)method2(x int) liu {
 	var l3 liu
 	l3=3
 	return l3  //此处，直接写成return 5也是可以工作的。
+
+}
+
+func (z zhang)method(x int){
+	fmt.Println("Zhang's Method",x)
 
 }

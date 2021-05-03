@@ -71,14 +71,21 @@ func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {  //用于HTTP
 	temp := func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		if !auth(req, f) {
 			log.Fatal("basic auth verify for normal request failed")
-			return nil, BasicUnauthorized(req)
+			return nil, BasicUnauthorized(req) //这个return是匿名函数的返回语句
 		}
 		req.Header.Del(ProxyAuthHeader)
-		return req, nil
+		return req, nil   //这个return是匿名函数的返回语句
 	}
-	return goproxy.FuncReqHandler(temp) //此处的用法是强制类型转换，将temp转换成了FuncReqHandler
-	// temp是个函数类型的变量，签名是：func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response)
+
+	return goproxy.FuncReqHandler(temp)
+	//此处的用法是强制类型转换，将《函数temp》转换成了《函数FuncReqHandler》,
+	// temp是个函数类型的变量，FuncReqHandler也是一个函数变量。
+	//它们两的签名都是：func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response)
 	//强制类型转换的前提是：被转换的变量与转换类型签名一致。
+	//接口ReqHandler的定义就是一个方法：Handle.
+	//而函数变量FuncReqHandler本身也有一个方法就是Handle. 因此这个类型的变量本身就是对ReqHandler的实现。
+
+	//if you have my method, you are my type!
 }
 
 
