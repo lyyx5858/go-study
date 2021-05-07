@@ -70,7 +70,7 @@ func ProxyBasicAuth(proxy *goproxy.ProxyHttpServer, f func(user, passwd string) 
 func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {  //用于HTTP
 	temp := func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		if !auth(req, f) {
-			log.Fatal("basic auth verify for normal request failed")
+			log.Println("basic auth verify for normal request failed")
 			return nil, BasicUnauthorized(req) //这个return是匿名函数的返回语句
 		}
 		req.Header.Del(ProxyAuthHeader)
@@ -95,7 +95,7 @@ func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {  //用于HTTP
 func BasicConnect(f func(user, passwd string) bool) goproxy.HttpsHandler { //用于HTTPS
 	return goproxy.FuncHttpsHandler(func(host string, ctx *goproxy.ProxyCtx) (*goproxy.ConnectAction, string) {
 		if !auth(ctx.Req, f) {
-			log.Fatal("basic auth verify for connect request failed")
+			log.Println("basic auth verify for connect request failed")
 			ctx.Resp = BasicUnauthorized(ctx.Req)
 			return goproxy.RejectConnect, host
 		}

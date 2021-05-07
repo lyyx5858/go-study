@@ -5,6 +5,7 @@ import (
 	"fmt"
 	goproxy "github.com/elazarl/goproxy"
 	"log"
+	"net"
 	"net/http"
 	"net/url"
 	"strings"
@@ -12,6 +13,9 @@ import (
 
 func main() {
 	username, password := "foo", "bar"
+
+	interfaces, _ := net.Interfaces()
+	fmt.Println(interfaces)
 
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.Verbose = true
