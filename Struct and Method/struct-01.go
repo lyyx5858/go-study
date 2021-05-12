@@ -12,6 +12,7 @@ type s3 struct { //嵌套结构体
 	//结构体的成员的数据类型在结构体中唯一时，可以省略名字！
 	s2   [3]s1 //结构体数组
 	name string
+	t *s1
 }
 
 func main() {
@@ -22,13 +23,17 @@ func main() {
 		a1,
 		s1{20, "li"}}
 
-	a3 := s3{s1{30, "test"}, a2, "liuyan"}
+	a3 := s3{
+		s1:		s1{30, "test"},
+		s2:		a2,
+		name:	"liuyan",
+		t:		&s1{18,"wang"}}
 
-	fmt.Println(a1)
-	fmt.Printf("%T,%v", a2, a2)
+	fmt.Println("a1=",a1)
+	fmt.Printf("a2= %T,%v\n", a2, a2)
 	fmt.Println()
-	fmt.Println(a3)
+	fmt.Println("a3=",a3)
 
-	fmt.Println(a3.s1.age)
+	fmt.Println("a3.s1.age=",a3.s1.age)
 
 }
