@@ -7,7 +7,7 @@ import (
 
 func main() {
 
-	listener, err := net.Listen("tcp", "127.0.0.1:8000")
+	listener, err := net.Listen("tcp", "127.0.0.1:8080")
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -15,7 +15,7 @@ func main() {
 	defer listener.Close()
 
 	fmt.Println("wait connection")
-
+for {
 	conn, err := listener.Accept()
 	if err != nil {
 		fmt.Println(err)
@@ -25,14 +25,14 @@ func main() {
 
 	fmt.Println("connection is sucessful")
 
-	buf := make([]byte, 4096)
+	buf := make([]byte, 10*4096)
 	n, err := conn.Read(buf)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println("deal with the buf")
-	fmt.Println("the buf is", string(buf[:n]))
+	fmt.Println("the buf is\n", string(buf[:n]))
+}
 
 }
