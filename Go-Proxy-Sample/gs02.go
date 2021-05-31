@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	username, password := "foo", "bar1"
+	username, password := "foo", "bar"
 	proxy := goproxy.NewProxyHttpServer()
 
 	proxy.Verbose = true
@@ -39,40 +39,14 @@ func main() {
 
 var unauthorizedMsg1 = []byte("407 Proxy Authentication Required")
 
-func BasicUnauthorized1(req *http.Request, realm string) *http.Response {
-	// TODO(elazar): verify realm is well formed
-	return &http.Response{
-		StatusCode: 407,
-		ProtoMajor: 1,
-		ProtoMinor: 1,
-		Request:    req,
-		Header: http.Header{
-			"Proxy-Authenticate": []string{"Basic realm=" + realm},
-			"Proxy-Connection":   []string{"close"},
-		},
-		Body:          ioutil.NopCloser(bytes.NewBuffer(unauthorizedMsg1)),
-		ContentLength: int64(len(unauthorizedMsg1)),
-	}
-}
-
 var proxyAuthorizationHeader = "Proxy-Authorization"
 
-func auth1(req *http.Request, f func(user, passwd string) bool) bool {
-	authheader := strings.SplitN(req.Header.Get(proxyAuthorizationHeader), " ", 2)
-	req.Header.Del(proxyAuthorizationHeader)
-	if len(authheader) != 2 || authheader[0] != "Basic" {
-		return false
-	}
-	userpassraw, err := base64.StdEncoding.DecodeString(authheader[1])
-	if err != nil {
-		return false
-	}
-	userpass := strings.SplitN(string(userpassraw), ":", 2)
-	if len(userpass) != 2 {
-		return false
-	}
-	fmt.Println(userpass[0],userpass[1])
-	return f(userpass[0], userpass[1])
+
+
+// ProxyBasic will force HTTP authentication before any request to the proxy is processed
+func ProxyBasic(proxy *goproxy.ProxyHttpServer, realm string, f func(user, passwd string) bool) {
+	proxy.OnRequest().Do(Basic1(realm, f))
+	proxy.OnRequest().HandleConnect(BasicConnect1(realm, f))
 }
 
 // Basic returns a basic HTTP authentication handler for requests
@@ -100,8 +74,37 @@ func BasicConnect1(realm string, f func(user, passwd string) bool) goproxy.Https
 	})
 }
 
-// ProxyBasic will force HTTP authentication before any request to the proxy is processed
-func ProxyBasic(proxy *goproxy.ProxyHttpServer, realm string, f func(user, passwd string) bool) {
-	proxy.OnRequest().Do(Basic1(realm, f))
-	proxy.OnRequest().HandleConnect(BasicConnect1(realm, f))
+
+func auth1(req *http.Request, f func(user, passwd string) bool) bool {
+	authheader := strings.SplitN(req.Header.Get(proxyAuthorizationHeader), " ", 2)
+	req.Header.Del(proxyAuthorizationHeader)
+	if len(authheader) != 2 || authheader[0] != "Basic" {
+		return false
+	}
+	userpassraw, err := base64.StdEncoding.DecodeString(authheader[1])
+	if err != nil {
+		return false
+	}
+	userpass := strings.SplitN(string(userpassraw), ":", 2)
+	if len(userpass) != 2 {
+		return false
+	}
+	fmt.Println(userpass[0],userpass[1])
+	return f(userpass[0], userpass[1])
+}
+
+func BasicUnauthorized1(req *http.Request, realm string) *http.Response {
+	// TODO(elazar): verify realm is well formed
+	return &http.Response{
+		StatusCode: 407,   //407就是让浏览器出现提示框，让用户手工输用户名和密码
+		ProtoMajor: 1,
+		ProtoMinor: 1,
+		Request:    req,
+		Header: http.Header{
+			"Proxy-Authenticate": []string{"Basic realm=" + realm},
+			"Proxy-Connection":   []string{"close"},
+		},
+		Body:          ioutil.NopCloser(bytes.NewBuffer(unauthorizedMsg1)),
+		ContentLength: int64(len(unauthorizedMsg1)),
+	}
 }

@@ -25,9 +25,6 @@ func main() {
 								//所谓方法，就是一个包含宿主（接收者）的函数
 								//所谓函数就是一小块内存，包含可执行代码
 
-
-
-
 	//下面是原始代码，在上面两行，利用临时变量f1来代替下面这几行，充分理解函数就是一个变量的概念
 	//ProxyBasicAuth(proxy, func(u, p string) bool {
 	//	return u == username && p == password
@@ -41,6 +38,10 @@ func main() {
 
 var unauthorizedMsg = []byte("404 not found")
 
+const (
+	ProxyAuthHeader = "Quic-Proxy-Authorization"
+)
+
 // ProxyBasic will force HTTP authentication before any request to the proxy is processed
 func ProxyBasicAuth(proxy *goproxy.ProxyHttpServer, f func(user, passwd string) bool) {
 	//原始语句如下，执行顺序是，从左向右
@@ -51,21 +52,20 @@ func ProxyBasicAuth(proxy *goproxy.ProxyHttpServer, f func(user, passwd string) 
 	proxy.OnRequest().HandleConnect(BasicConnect(f))
 }
 
-
 // Basic returns a basic HTTP authentication handler for requests
 // You probably want to use auth.ProxyBasic(proxy) to enable authentication for all proxy activities
 
-//func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {
-//	//FuncReqHandler是一种类型，下面这句话利用强制类型转换，将一个匿名函数转换成了FuncReqHandler类型
-//	return goproxy.FuncReqHandler(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
-//		if !auth(req, f) {
-//			log.Fatal("basic auth verify for normal request failed")
-//			return nil, BasicUnauthorized(req)
-//		}
-//		req.Header.Del(ProxyAuthHeader)
-//		return req, nil
-//	})
-//}
+/*func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {
+	//FuncReqHandler是一种类型，下面这句话利用强制类型转换，将一个匿名函数转换成了FuncReqHandler类型
+	return goproxy.FuncReqHandler(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+		if !auth(req, f) {
+			log.Fatal("basic auth verify for normal request failed")
+			return nil, BasicUnauthorized(req)
+		}
+		req.Header.Del(ProxyAuthHeader)
+		return req, nil
+	})
+}*/
 //下面这个函数是上面的改写，只是为了让结构清楚。
 func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {  //用于HTTP
 	temp := func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
@@ -78,16 +78,16 @@ func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {  //用于HTTP
 	}
 
 	return goproxy.FuncReqHandler(temp)
-	//此处的用法是强制类型转换，将《函数temp》转换成了《函数FuncReqHandler》,
+	//此处的用法是强制类型转换，将 "函数temp" 转换成了 "函数FuncReqHandler",
 	// temp是个函数类型的变量，FuncReqHandler也是一个函数变量。
 	//它们两的签名都是：func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response)
 	//强制类型转换的前提是：被转换的变量与转换类型签名一致。
-	//接口ReqHandler的定义就是一个方法：Handle.
-	//而函数变量FuncReqHandler本身也有一个方法就是Handle. 因此这个类型的变量本身就是对ReqHandler的实现。
+	//接口goproxy.ReqHandler的定义就是一个方法：Handle.
+	//而函数变量goproxy.FuncReqHandler本身也有一个方法就是Handle. 因此这个类型的变量本身就是对goproxy.ReqHandler的实现。
 
-	//if you have my method, you are my type!
+	//记住这句话：if you have my method, you are my type!
+	//FuncReqHandler 有 "Handle" 这个方法, so 它是ReqHandler type.
 }
-
 
 // BasicConnect returns a basic HTTP authentication handler for CONNECT requests
 //
@@ -137,33 +137,11 @@ func BasicUnauthorized(req *http.Request) *http.Response {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //COMMON
-const (
-	ProxyAuthHeader = "Quic-Proxy-Authorization"
-)
 
+
+
+/*
 func SetBasicAuth(username, password string, req *http.Request) {
 	req.Header.Set(ProxyAuthHeader, fmt.Sprintf("Basic %s", basicAuth(username, password)))
 }
@@ -193,3 +171,4 @@ func GetBasicAuth(req *http.Request) (username, password string, ok bool) {
 	}
 	return cs[:s], cs[s+1:], true
 }
+*/
