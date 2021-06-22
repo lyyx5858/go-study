@@ -8,8 +8,8 @@ type Liu int //Liu 是个本地定义的数据类型，其实就是int的别名
 type Wang int
 
 type struct1 struct {
-	i1 interface1
-	interface2
+	i1         interface1
+	interface2 //匿名字段
 }
 
 type interface1 interface { //所有实现了方法method1和method2的变量都可以用interface1接口。
@@ -40,38 +40,42 @@ func main() {
 	//举例：interface1有两个方法，inteface2有三个方法，所有以interface1为参数的函数都可以用interface2.
 	//反之则不行,因为少了一个方法。
 
-	var s1 struct1
-	s1.i1 = l1
-	s1.interface2 = w1
+	// s1 是个结构，
+	s1 := struct1{
+		i1:         l1,
+		interface2: w1,
+	}
 
+	s2 := struct1{l1, w1}
 	test(s1)
+	test(&s2)
 
 }
 
 func (l Liu) method1() {
-	fmt.Println("this is method1", l)
+	fmt.Println("L's method1", l)
 }
 func (l Liu) method2() {
-	fmt.Println("this is method2", l)
+	fmt.Println("L's method2", l)
 }
 
 //=========================================================================
 func (w Wang) method1() {
-	fmt.Println("W: this is method1", w)
+	fmt.Println("W's method1", w)
 }
 func (w Wang) method2() {
-	fmt.Println("W: this is method2", w)
+	fmt.Println("W's method2", w)
 }
 func (w Wang) method3() {
-	fmt.Println("W: this is method3", w)
+	fmt.Println("W's method3", w)
 }
 
-func test(i interface1) { // 函数test的形参是接口 i，i的数据类型是interface1，
+func test(i interface1) (x interface1) { // 函数test的形参是接口 i，i的数据类型是interface1，
 	// 而interface1的接口定义中：必须实现方法method1和2：见程序开并头！
 	//因此，所有实现了method1和2的数据类型都可调用函数test1.
-
 	i.method1() //接口i直接调用方法method1
 	i.method2()
+	return i
 }
 
 // 假如有个男人，性别是：男，有两个方法，分别是： 吃（）{馒头}，睡（）{硬板床}
