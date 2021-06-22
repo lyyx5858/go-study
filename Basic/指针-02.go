@@ -5,7 +5,7 @@ import (
 )
 
 func main() {
-	s0 := [3]int{9,8,7}
+	s0 := [3]int{9, 8, 7}
 	r0 := s0
 	r0[0] = 12
 	fmt.Println(s0)
