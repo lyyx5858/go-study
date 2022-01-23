@@ -22,16 +22,18 @@ func main() {
 
 	var l1 Liu //l1是数据类型Liu的实例
 	var w1 Wang
+	var x1 int
 
-	l1 = 1
+	x1 = 1
 	w1 = "好好学习"
+	l1 = Liu(x1) //当底层数据类型一样时，可以进行强制类型转换。因为x1和l1都是int.
 
 	test(l1)
 	test(w1)
 
 }
 
-//=========================================================================
+//==================================
 func (l Liu) method1() {
 	fmt.Println("L's method1", l)
 }
@@ -39,6 +41,7 @@ func (l Liu) method2() {
 	fmt.Println("L's method2", l)
 }
 
+//----------------------------------
 func (w Wang) method1() {
 	fmt.Println("W's method1", w)
 }

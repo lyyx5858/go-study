@@ -26,7 +26,6 @@ func main() {
 		}
 	}()
 
-
 	err := client()
 	if err != nil {
 		panic(err)

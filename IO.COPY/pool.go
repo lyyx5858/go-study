@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"sync"
-
 )
 
 var pool = sync.Pool{

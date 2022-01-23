@@ -77,13 +77,13 @@ func handle(client net.Conn) {
 
 	var server net.Conn
 
-	retry:=3
-	//server, err := net.Dial("tcp", address)
+	retry := 3
+	//server, err := Quic.Dial("tcp", address)
 	for i := 0; i < retry; i++ {
 		server, err = net.Dial("tcp", host)
 		if err != nil {
 			log.Println("2:Dial err:", err)
-			time.Sleep(10*time.Millisecond)
+			time.Sleep(10 * time.Millisecond)
 		} else {
 			break
 		}
@@ -97,7 +97,7 @@ func handle(client net.Conn) {
 	}
 	resp.Header.Add("Proxy-Agent", "test")
 
-	if err!= nil {
+	if err != nil {
 		resp.StatusCode = http.StatusServiceUnavailable
 		resp.Write(client)
 		return
@@ -137,7 +137,7 @@ func handle(client net.Conn) {
 			"Proxy-Agent: test" + "\r\n\r\n")
 		client.Write(b)
 		if err != nil {
-			log.Println("3:",err)
+			log.Println("3:", err)
 		}
 	} else {
 		req.Header.Del("Proxy-Connection")

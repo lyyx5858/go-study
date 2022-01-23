@@ -33,7 +33,6 @@ func main() {
 		i++
 		fmt.Println("====================i=", i, "==============================")
 
-
 		n, err := client.Read(clientData) // 此处读client发过来的http请求至clientData, n是表示读了多少个字节
 		requestStrings := string(clientData[:n])
 		//log.Println("CLIENT request =========: \n\n", requestStrings) //RequestStrings是http 标准包头
@@ -80,7 +79,7 @@ func main() {
 			continue
 		}
 
-		//server, err := net.Dial("tcp", address)
+		//server, err := Quic.Dial("tcp", address)
 		server, err := net.Dial("tcp", address)
 		if err != nil {
 			log.Println("Dial err:", err)
