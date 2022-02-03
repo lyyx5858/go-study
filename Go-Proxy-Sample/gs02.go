@@ -19,13 +19,11 @@ func main() {
 
 	f1 := func(u, p string) bool { return u == username && p == password }
 
-	ProxyBasic(proxy, "CSI",f1)  //这个函数的目的是将认证过程注册成为Proxy结构体的ReqHandler数组上去.
-								//所谓Handler，其实就是一个接口。
-								//所谓接口，就是定义了一个或者多个方法。
-								//所谓方法，就是一个包含宿主（接收者）的函数
-								//所谓函数就是一小块内存，包含可执行代码
-
-
+	ProxyBasic(proxy, "CSI", f1) //这个函数的目的是将认证过程注册成为Proxy结构体的ReqHandler数组上去.
+	//所谓Handler，其实就是一个接口。
+	//所谓接口，就是定义了一个或者多个方法。
+	//所谓方法，就是一个包含宿主（接收者）的函数
+	//所谓函数就是一小块内存，包含可执行代码
 
 	//下面是原始代码，在上面两行，利用临时变量f1来代替下面这几行，充分理解函数就是一个变量的概念
 	//ProxyBasicAuth(proxy, func(u, p string) bool {
@@ -36,12 +34,9 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", proxy))
 }
 
-
 var unauthorizedMsg1 = []byte("407 Proxy Authentication Required")
 
 var proxyAuthorizationHeader = "Proxy-Authorization"
-
-
 
 // ProxyBasic will force HTTP authentication before any request to the proxy is processed
 func ProxyBasic(proxy *goproxy.ProxyHttpServer, realm string, f func(user, passwd string) bool) {
@@ -74,7 +69,6 @@ func BasicConnect1(realm string, f func(user, passwd string) bool) goproxy.Https
 	})
 }
 
-
 func auth1(req *http.Request, f func(user, passwd string) bool) bool {
 	authheader := strings.SplitN(req.Header.Get(proxyAuthorizationHeader), " ", 2)
 	req.Header.Del(proxyAuthorizationHeader)
@@ -89,14 +83,14 @@ func auth1(req *http.Request, f func(user, passwd string) bool) bool {
 	if len(userpass) != 2 {
 		return false
 	}
-	fmt.Println(userpass[0],userpass[1])
+	fmt.Println(userpass[0], userpass[1])
 	return f(userpass[0], userpass[1])
 }
 
 func BasicUnauthorized1(req *http.Request, realm string) *http.Response {
 	// TODO(elazar): verify realm is well formed
 	return &http.Response{
-		StatusCode: 407,   //407就是让浏览器出现提示框，让用户手工输用户名和密码
+		StatusCode: 407, //407就是让浏览器出现提示框，让用户手工输用户名和密码
 		ProtoMajor: 1,
 		ProtoMinor: 1,
 		Request:    req,

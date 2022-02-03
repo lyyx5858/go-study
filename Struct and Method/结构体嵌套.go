@@ -70,3 +70,7 @@ type Student struct {
 	Person        //模拟继承结构
 	school string //子类的新增属性
 }
+
+func (p Person) eat() {
+	fmt.Println("eat")
+}

@@ -19,11 +19,11 @@ func main() {
 
 	f1 := func(u, p string) bool { return u == username && p == password }
 
-	ProxyBasicAuth(proxy, f1)  //这个函数的目的是将认证过程注册成为Proxy结构体的ReqHandler数组上去.
-								//所谓Handler，其实就是一个接口。
-								//所谓接口，就是定义了一个或者多个方法。
-								//所谓方法，就是一个包含宿主（接收者）的函数
-								//所谓函数就是一小块内存，包含可执行代码
+	ProxyBasicAuth(proxy, f1) //这个函数的目的是将认证过程注册成为Proxy结构体的ReqHandler数组上去.
+	//所谓Handler，其实就是一个接口。
+	//所谓接口，就是定义了一个或者多个方法。
+	//所谓方法，就是一个包含宿主（接收者）的函数
+	//所谓函数就是一小块内存，包含可执行代码
 
 	//下面是原始代码，在上面两行，利用临时变量f1来代替下面这几行，充分理解函数就是一个变量的概念
 	//ProxyBasicAuth(proxy, func(u, p string) bool {
@@ -47,7 +47,7 @@ func ProxyBasicAuth(proxy *goproxy.ProxyHttpServer, f func(user, passwd string) 
 	//原始语句如下，执行顺序是，从左向右
 	//proxy.OnRequest().Do(Basic(f))
 	temp := proxy.OnRequest()
-	temp.Do(Basic(f))   //此处，Basic(f)的返回值是一个Handler.
+	temp.Do(Basic(f)) //此处，Basic(f)的返回值是一个Handler.
 	//注意：Basic(f) 与 BasicConnect(f)的区别
 	proxy.OnRequest().HandleConnect(BasicConnect(f))
 }
@@ -67,15 +67,15 @@ func ProxyBasicAuth(proxy *goproxy.ProxyHttpServer, f func(user, passwd string) 
 	})
 }*/
 //下面这个函数是上面的改写，只是为了让结构清楚。
-func Basic(f func(user, passwd string) bool) goproxy.ReqHandler {  //用于HTTP
+func Basic(f func(user, passwd string) bool) goproxy.ReqHandler { //用于HTTP
 	temp := func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
 		if !auth(req, f) {
 			log.Println("basic auth verify for normal request failed")
 			return nil, BasicUnauthorized(req) //这个return是匿名函数的返回语句
 		}
 		req.Header.Del(ProxyAuthHeader)
-		return req, nil   //这个return是匿名函数的返回语句
-	}
+		return req, nil //这个return是匿名函数的返回语句
+	} //此处匿名函数结束
 
 	return goproxy.FuncReqHandler(temp)
 	//此处的用法是强制类型转换，将 "函数temp" 转换成了 "函数FuncReqHandler",
@@ -135,11 +135,7 @@ func BasicUnauthorized(req *http.Request) *http.Response {
 	}
 }
 
-
-
 //COMMON
-
-
 
 /*
 func SetBasicAuth(username, password string, req *http.Request) {
