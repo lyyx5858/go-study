@@ -34,7 +34,7 @@ func main() {
 
 	test(l1)
 	test(w1)
-	j1 := jiegou1{}
+	j1 := jiegou1{l1}
 	j1.method1()
 
 }
