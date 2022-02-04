@@ -25,7 +25,7 @@ func test(ctx context.Context) {
 		fmt.Println(z)
 
 		select {
-		case <-ctx.Done():
+		case <-ctx.Done(): //当主程序里使用cancel()这句话后，这个值就可以读到了，说明主程序指示：该结束了。
 			fmt.Println("DONE")
 			fmt.Println(ctx.Err())
 			return
