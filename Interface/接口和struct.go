@@ -16,6 +16,10 @@ type jiegou1 struct {
 	interface1
 }
 
+type jiegou2 struct {
+	int
+}
+
 func test(i interface1) { //i的数据类型是interface1，
 	fmt.Println(i)
 	i.method1() //接口i直接调用方法method1
@@ -27,6 +31,10 @@ func main() {
 	var l1 Liu //l1是数据类型Liu的实例
 	var w1 Wang
 	var x1 int
+
+	var t interface1
+
+	t = jiegou1{l1}
 
 	x1 = 1
 	w1 = "好好学习"

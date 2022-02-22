@@ -37,7 +37,7 @@ func main() {
 
 	var Em []Employee
 
-	//  Em=make([]Employee,2)
+	Em = make([]Employee, 2)
 	Em[0] = e
 	// Em[1] :=e
 
@@ -47,7 +47,7 @@ func main() {
 
 	fmt.Printf("\n\nEmployee age before change: %d", e.age)
 	e.changeAge(51)
-	fmt.Printf("\nEmployee age after change: %d\n", Em[0].age)
-	// fmt.Printf("\nEmployee age after change: %d\n", Em)
+	fmt.Printf("\nEmployee age after change: %d\n", e.age)
+	fmt.Println(Em[0])
 
 }

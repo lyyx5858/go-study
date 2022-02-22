@@ -20,6 +20,7 @@ func main() {
 	res3 := increment()
 	fmt.Println(res3)   //res3再次调用increment的时候，res3又指向了匿名函数fun，但是其中的i重新创建了。
 	fmt.Println(res3()) //此处打印的值是新的i
+	fmt.Println(res2())
 
 }
 
