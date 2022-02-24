@@ -10,8 +10,8 @@ import (
 
 var (
 	addr     = "127.0.0.1:7100"
-	username = "administrator"
-	password = "1234567"
+	username = "test"
+	password = "test123"
 )
 
 //tunnel 通道处理
