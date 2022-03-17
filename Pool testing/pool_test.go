@@ -7,7 +7,7 @@ import (
 )
 
 //go test -bench="Benchmark" -benchtime=5s -benchmem
-var psize int = 20000
+var psize int = 5000
 
 var bufferPool1 = sync.Pool{
 	New: func() interface{} {
@@ -50,7 +50,7 @@ func BenchmarkBufferWithPool2(b *testing.B) {
 
 func BenchmarkBufferWithoutPool(b *testing.B) {
 	for n := 0; n < b.N; n++ {
-		buf := make([]byte, 20000)
+		buf := make([]byte, 5000)
 		copy(buf, data)
 	}
 }
