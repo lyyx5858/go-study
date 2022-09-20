@@ -7,6 +7,7 @@ import (
 
 func main() {
 	ch := make(chan int, 1)
+
 	//ch <- 1
 
 	//loop这个函数里有循环，
@@ -37,6 +38,7 @@ func accept(ch chan int) {
 
 func loop(ch chan int) {
 	fmt.Println("loop start...")
+
 	for i := 1; i < 10; i++ {
 		fmt.Println("I is:", i)
 		ch <- i
