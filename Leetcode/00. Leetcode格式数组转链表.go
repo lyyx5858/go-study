@@ -31,13 +31,14 @@ func buildList(arr []int) *ListNode {
 
 func PrintList(root *ListNode) {
 	if root == nil {
-		fmt.Printf("\n")
+		fmt.Printf("-->nil\n")
 		return
 	}
 	if root.Next != nil {
 		fmt.Printf("%d-->", root.Val)
 	} else {
-		fmt.Printf("%d", root.Val)
+		fmt.Printf("%d-->nil", root.Val)
+		return
 	}
 
 	PrintList(root.Next)

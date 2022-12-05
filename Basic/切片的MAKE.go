@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"time"
 )
 
 func main() {
@@ -19,13 +18,12 @@ func main() {
 	//因此 下句话会报错的。
 	//但是在没有用MAKE语句之前， 可以看出来b本身是有个地址了，但是应该指向底层数组的地址为0。
 	fmt.Println("After make") //声明 b是个一维的整型切片
-	fmt.Printf(" b's address: %p,  b's value: %p \n", &b, b)
+	fmt.Printf(" b's address: %p,  b's value: %p :底层数组的地址\n", &b, b)
 
 	b[0] = 1 //这句话不会报错了
 	fmt.Println(b[0])
-	time.Sleep(30 * time.Second)
+
 	b[0] = 2
 	fmt.Println(b[0])
 
-	time.Sleep(60000 * time.Second)
 }
