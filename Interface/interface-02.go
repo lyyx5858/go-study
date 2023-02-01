@@ -18,8 +18,9 @@ type interface1 interface { //所有实现了方法method1和method2的变量都
 }
 
 type interface2 interface {
-	method1()
-	method2()
+	//method1()
+	//method2()
+	interface1
 	method3()
 }
 
@@ -52,6 +53,8 @@ func main() {
 
 }
 
+//=========================================================================
+
 func (l Liu) method1() {
 	fmt.Println("L's method1", l)
 }
@@ -59,7 +62,6 @@ func (l Liu) method2() {
 	fmt.Println("L's method2", l)
 }
 
-//=========================================================================
 func (w Wang) method1() {
 	fmt.Println("W's method1", w)
 }
